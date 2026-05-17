@@ -15,12 +15,12 @@
   <meta name="theme-color" content="#07182d" />
   <meta name="description" content="Simula los resultados de las últimas jornadas de la Segunda División y calcula la clasificación final para el ascenso directo y el playoff." />
   <meta property="og:title" content="Simulador de Ascenso | Segunda División" />
-  <meta property="og:description" content="Predice los resultados de las jornadas 40, 41 y 42 y descubre si tu equipo asciende o va al playoff." />
+  <meta property="og:description" content="Predice los resultados de las jornadas 41 y 42 y descubre si tu equipo asciende o va al playoff." />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_ES" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Simulador de Ascenso | Segunda División" />
-  <meta name="twitter:description" content="Predice los resultados de las jornadas 40, 41 y 42 y descubre si tu equipo asciende o va al playoff." />
+  <meta name="twitter:description" content="Predice los resultados de las jornadas 41 y 42 y descubre si tu equipo asciende o va al playoff." />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Simulador Ascenso" />
@@ -2689,23 +2689,23 @@
     const STORAGE_KEY = "segunda-ascenso-simulator-v1";
 
     const initialStandings = [
-      { name: "Racing", crestUrl: "assets/escudos/racing.png", position: 1, points: 75, played: 39, wins: 22, draws: 9, losses: 8, gf: 64, ga: 37, gd: 27 },
-      { name: "Deportivo", crestUrl: "assets/escudos/deportivo.png", position: 2, points: 71, played: 39, wins: 20, draws: 11, losses: 8, gf: 59, ga: 38, gd: 21 },
-      { name: "Almería", crestUrl: "assets/escudos/almeria.png", position: 3, points: 71, played: 39, wins: 20, draws: 11, losses: 8, gf: 68, ga: 48, gd: 20 },
-      { name: "Málaga", crestUrl: "assets/escudos/malaga.png", position: 4, points: 66, played: 39, wins: 18, draws: 12, losses: 9, gf: 53, ga: 41, gd: 12 },
-      { name: "Las Palmas", crestUrl: "assets/escudos/las-palmas.png", position: 5, points: 66, played: 39, wins: 18, draws: 12, losses: 9, gf: 55, ga: 44, gd: 11 },
-      { name: "Castellón", crestUrl: "assets/escudos/castellon.png", position: 6, points: 65, played: 39, wins: 18, draws: 11, losses: 10, gf: 57, ga: 46, gd: 11 },
-      { name: "Eibar", crestUrl: "assets/escudos/eibar.png", position: 7, points: 64, played: 39, wins: 17, draws: 13, losses: 9, gf: 51, ga: 39, gd: 12 },
-      { name: "Burgos CF", crestUrl: "assets/escudos/burgos.png", position: 8, points: 63, played: 39, wins: 17, draws: 12, losses: 10, gf: 48, ga: 40, gd: 8 }
+      { name: "Racing", crestUrl: "assets/escudos/racing.png", position: 1, points: 78, played: 40, wins: 23, draws: 9, losses: 8, gf: 68, ga: 38, gd: 30 },
+      { name: "Deportivo", crestUrl: "assets/escudos/deportivo.png", position: 2, points: 74, played: 40, wins: 21, draws: 11, losses: 8, gf: 61, ga: 39, gd: 22 },
+      { name: "Almería", crestUrl: "assets/escudos/almeria.png", position: 3, points: 71, played: 40, wins: 20, draws: 11, losses: 9, gf: 69, ga: 50, gd: 19 },
+      { name: "Málaga", crestUrl: "assets/escudos/malaga.png", position: 4, points: 69, played: 40, wins: 19, draws: 12, losses: 9, gf: 57, ga: 42, gd: 15 },
+      { name: "Las Palmas", crestUrl: "assets/escudos/las-palmas.png", position: 5, points: 69, played: 40, wins: 19, draws: 12, losses: 9, gf: 57, ga: 45, gd: 12 },
+      { name: "Castellón", crestUrl: "assets/escudos/castellon.png", position: 6, points: 66, played: 40, wins: 18, draws: 12, losses: 10, gf: 58, ga: 47, gd: 11 },
+      { name: "Burgos CF", crestUrl: "assets/escudos/burgos.png", position: 7, points: 66, played: 40, wins: 18, draws: 12, losses: 10, gf: 49, ga: 40, gd: 9 },
+      { name: "Eibar", crestUrl: "assets/escudos/eibar.png", position: 8, points: 64, played: 40, wins: 17, draws: 13, losses: 10, gf: 52, ga: 41, gd: 11 }
     ];
 
     const externalTeams = [
-      { name: "AD Ceuta FC", crestUrl: "assets/escudos/ceuta.png", position: 9, points: 58, played: 39, wins: 15, draws: 13, losses: 11, gf: 45, ga: 40, gd: 5 },
-      { name: "Real Valladolid", crestUrl: "assets/escudos/valladolid.png", position: 10, points: 56, played: 39, wins: 15, draws: 11, losses: 13, gf: 47, ga: 43, gd: 4 },
-      { name: "Granada", crestUrl: "assets/escudos/granada.png", position: 11, points: 55, played: 39, wins: 14, draws: 13, losses: 12, gf: 46, ga: 44, gd: 2 },
-      { name: "Cádiz", crestUrl: "assets/escudos/cadiz.png", position: 12, points: 54, played: 39, wins: 14, draws: 12, losses: 13, gf: 43, ga: 42, gd: 1 },
-      { name: "Cultural Leonesa", crestUrl: "assets/escudos/cultural-leonesa.png", position: 13, points: 51, played: 39, wins: 13, draws: 12, losses: 14, gf: 41, ga: 45, gd: -4 },
-      { name: "Andorra", crestUrl: "assets/escudos/andorra.png", position: 14, points: 50, played: 39, wins: 13, draws: 11, losses: 15, gf: 39, ga: 44, gd: -5 },
+      { name: "AD Ceuta FC", crestUrl: "assets/escudos/ceuta.png", position: 9, points: 58, played: 40, wins: 15, draws: 13, losses: 12, gf: 46, ga: 44, gd: 2 },
+      { name: "Real Valladolid", crestUrl: "assets/escudos/valladolid.png", position: 10, points: 56, played: 40, wins: 15, draws: 11, losses: 14, gf: 48, ga: 47, gd: 1 },
+      { name: "Granada", crestUrl: "assets/escudos/granada.png", position: 11, points: 55, played: 40, wins: 14, draws: 13, losses: 13, gf: 46, ga: 45, gd: 1 },
+      { name: "Cádiz", crestUrl: "assets/escudos/cadiz.png", position: 12, points: 55, played: 40, wins: 14, draws: 13, losses: 13, gf: 44, ga: 43, gd: 1 },
+      { name: "Cultural Leonesa", crestUrl: "assets/escudos/cultural-leonesa.png", position: 13, points: 54, played: 40, wins: 14, draws: 12, losses: 14, gf: 43, ga: 46, gd: -3 },
+      { name: "Andorra", crestUrl: "assets/escudos/andorra.png", position: 14, points: 50, played: 40, wins: 13, draws: 11, losses: 16, gf: 40, ga: 46, gd: -6 },
       { name: "Real Zaragoza", crestUrl: "assets/escudos/zaragoza.png", position: 15, points: 49, played: 39, wins: 12, draws: 13, losses: 14, gf: 40, ga: 43, gd: -3 },
       { name: "Huesca", crestUrl: "assets/escudos/huesca.png", position: 16, points: 47, played: 39, wins: 11, draws: 14, losses: 14, gf: 37, ga: 41, gd: -4 },
       { name: "Córdoba", crestUrl: "assets/escudos/cordoba.png", position: 17, points: 45, played: 39, wins: 11, draws: 12, losses: 16, gf: 42, ga: 50, gd: -8 },
@@ -2713,18 +2713,6 @@
     ];
 
     const pendingRounds = [
-      {
-        name: "Jornada 40",
-        matches: [
-          ["AD Ceuta FC", "Málaga CF"],
-          ["Racing", "Real Valladolid"],
-          ["Almería", "Las Palmas"],
-          ["Granada", "Burgos CF"],
-          ["Castellón", "Cádiz CF"],
-          ["Cultural Leonesa", "Eibar"],
-          ["Deportivo", "Andorra"]
-        ]
-      },
       {
         name: "Jornada 41",
         matches: [
