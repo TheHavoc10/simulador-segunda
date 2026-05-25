@@ -2732,6 +2732,24 @@
       "Cádiz CF": "Cádiz"
     };
 
+    // Enfrentamientos directos ya disputados en 2025-26 entre los equipos del top 8.
+    // Se usan para el desempate por enfrentamiento directo en empates a 2 equipos.
+    const historicalH2H = [
+      { home: "Racing",     hg: 2, away: "Deportivo",   ag: 1 }, // J10
+      { home: "Deportivo",  hg: 0, away: "Racing",      ag: 1 }, // J24
+      { home: "Burgos CF",  hg: 0, away: "Castellón",   ag: 0 }, // J13
+      { home: "Castellón",  hg: 3, away: "Burgos CF",   ag: 1 }, // J37
+      { home: "Las Palmas", hg: 0, away: "Málaga",      ag: 1 }, // J4
+      { home: "Málaga",     hg: 2, away: "Las Palmas",  ag: 0 }, // J35
+      { home: "Las Palmas", hg: 0, away: "Almería",     ag: 1 }, // J7
+      { home: "Almería",    hg: 1, away: "Las Palmas",  ag: 2 }, // J40
+      { home: "Málaga",     hg: 2, away: "Almería",     ag: 1 }, // J19
+      { home: "Almería",    hg: 3, away: "Málaga",      ag: 2 }, // J36
+      { home: "Las Palmas", hg: 1, away: "Deportivo",   ag: 1 }, // J21
+      { home: "Eibar",      hg: 0, away: "Castellón",   ag: 0 }, // J9
+      { home: "Castellón",  hg: 2, away: "Málaga",      ag: 1 }, // J12
+    ];
+
     const quickScores = {
       "1": { home: 1, away: 0 },
       "X": { home: 1, away: 1 },
@@ -2949,9 +2967,50 @@
       }
     }
 
+    function getH2HStats(nameA, nameB, h2hList) {
+      let ap = 0, bp = 0, agf = 0, bgf = 0, aga = 0, bga = 0;
+      h2hList.forEach(({ home: h, hg, away: a, ag }) => {
+        const hn = normalizeTeamName(h), an = normalizeTeamName(a);
+        if (hn === nameA && an === nameB) {
+          agf += hg; aga += ag; bgf += ag; bga += hg;
+          if (hg > ag) ap += 3; else if (hg === ag) { ap += 1; bp += 1; } else bp += 3;
+        } else if (hn === nameB && an === nameA) {
+          bgf += hg; bga += ag; agf += ag; aga += hg;
+          if (hg > ag) bp += 3; else if (hg === ag) { ap += 1; bp += 1; } else ap += 3;
+        }
+      });
+      return { ap, bp, agd: agf - aga, bgd: bgf - bga, agf, bgf };
+    }
+
+    function sortedTable(teams, h2hList) {
+      const gdThenGf = (a, b) =>
+        b.gd !== a.gd ? b.gd - a.gd : b.gf !== a.gf ? b.gf - a.gf : a.name.localeCompare(b.name, "es");
+      teams.sort((a, b) => b.points - a.points);
+      const out = [];
+      let i = 0;
+      while (i < teams.length) {
+        let j = i + 1;
+        while (j < teams.length && teams[j].points === teams[i].points) j++;
+        const grp = teams.slice(i, j);
+        if (grp.length === 2) {
+          const [x, y] = grp;
+          const s = getH2HStats(x.name, y.name, h2hList);
+          if (s.ap !== s.bp) out.push(...(s.ap > s.bp ? [x, y] : [y, x]));
+          else if (s.agd !== s.bgd) out.push(...(s.agd > s.bgd ? [x, y] : [y, x]));
+          else if (s.agf !== s.bgf) out.push(...(s.agf > s.bgf ? [x, y] : [y, x]));
+          else out.push(...grp.sort(gdThenGf));
+        } else {
+          out.push(...grp.sort(gdThenGf));
+        }
+        i = j;
+      }
+      return out;
+    }
+
     function calculateTable(sourceState = state) {
       const table = cloneInitialTable();
       let predictedCount = 0;
+      const simulatedH2H = [];
 
       matches.forEach(match => {
         const result = getScoreFromMatch(match.id, sourceState);
@@ -2963,14 +3022,12 @@
 
         if (homeMain) applyResult(table.get(homeMain), result.home, result.away);
         if (awayMain) applyResult(table.get(awayMain), result.away, result.home);
+        if (homeMain && awayMain) {
+          simulatedH2H.push({ home: homeMain, hg: result.home, away: awayMain, ag: result.away });
+        }
       });
 
-      const rows = [...table.values()].sort((a, b) => {
-        if (b.points !== a.points) return b.points - a.points;
-        if (b.gd !== a.gd) return b.gd - a.gd;
-        if (b.gf !== a.gf) return b.gf - a.gf;
-        return a.name.localeCompare(b.name, "es");
-      });
+      const rows = sortedTable([...table.values()], [...historicalH2H, ...simulatedH2H]);
 
       return { rows, predictedCount };
     }
